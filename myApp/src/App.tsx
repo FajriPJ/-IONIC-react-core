@@ -1,4 +1,5 @@
-import { Redirect, Route } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -7,11 +8,14 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  IonSpinner
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle } from 'ionicons/icons';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
+import './App.css';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -32,20 +36,69 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/register">
-            <Redirect to="/register" />
-            <Register />
-          </Route>
-        </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+import { getCurrentUser } from './firebaseConfig'
 
+const RouteGuard: React.FC = () => {
+  return (
+    <IonReactRouter>
+      <IonRouterOutlet>
+        <Route path="/register" component={Register} exact/>
+        <Route path="/login" component={Login} exact/>
+        <Route path="/" component={Profile} exact/>
+      </IonRouterOutlet>
+    </IonReactRouter>
+  )
+}
+
+const App: React.FC = () => {
+
+  const history = useHistory()
+  const [busy, setBusy] = useState(true)
+
+  useEffect(() => {
+    getCurrentUser()
+      .then(user => {
+        if (user) {
+          window.history.replaceState({}, '', '/' )
+        } else {
+          window.history.replaceState({}, '', '/login')
+        }
+        setBusy(false)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
+
+
+  return (
+    <IonApp>
+      {
+      busy ? 
+        <div className="spin">
+          <IonSpinner duration={5} color="tertiary" name="bubbles"/> 
+        </div>
+        : 
+        <RouteGuard/>}
+    </IonApp>
+    // <IonReactRouter>
+    //   <IonRouterOutlet>
+    //     <Route 
+    //       path="/" 
+    //       render={() => isLogin ? <Profile/> : <Login/>}
+    //       exact/>
+    //     <Route 
+    //       path="/login" 
+    //       render={() => isLogin ? <Profile/>: <Register/>}
+    //       exact/>
+    //     <Route 
+    //       path="/register" 
+    //       render={() => isLogin ? <Profile/>: <Register/>}
+    //       exact/>
+    //   </IonRouterOutlet>
+    // </IonReactRouter>
+  )
+}
+
+ 
 export default App;

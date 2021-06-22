@@ -1,0 +1,24 @@
+
+.vertical-center {
+  position:absolute;
+  top:10%;
+}
+
+.avatar{
+  margin: auto;
+}
+
+.item-avatar  {     
+  width:100% !important;  
+  height : 100% !important;  
+  max-width: 100px !important;  
+  max-height: 100px !important; 
+}
+
+.edit-button {
+  width: 95%;
+  border-radius: 50%;
+  vertical-align: middle;
+  padding-start: 10px;
+  padding-end: 10px;
+}
