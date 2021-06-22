@@ -28,16 +28,12 @@ import {
 import { calendarNumber, mailOpen, person, call } from "ionicons/icons";
 import { logOutUser } from "../firebaseConfig";
 import { useHistory, Link } from "react-router-dom";
-// import {profileUser} from '../firebaseConfig'
 import { auth, database } from "../firebaseConfig";
+import { toast } from "../components/toast";
 
 import firebase from "firebase";
 require("firebase/auth");
 
-type Item = {
-  src: string;
-  text: string;
-};
 
 const Profile: React.FC = () => {
   const history = useHistory();
@@ -48,9 +44,6 @@ const Profile: React.FC = () => {
   const [updateBirthdate, setUpdateBirthdate] = useState("")
   const [updatePhone, setUpdatePhone] = useState("")
 
-  // console.log(updateName, updatePhone, updateBirthdate, ';;;;')
-  console.log(usersData, 'ghjklkjhghjk')
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -59,7 +52,6 @@ const Profile: React.FC = () => {
           .doc(user.uid)
           .onSnapshot(
             (doc) => {
-              console.log(doc.data(), '))))))))))))')
               setUsersData({
                 id: user.uid,
                 name: doc.data()?.name,
@@ -67,7 +59,6 @@ const Profile: React.FC = () => {
                 photoURL: user.photoURL,
                 email: user.email,
                 birthdate: doc.data()?.birthdate,
-                // phoneNumber: doc.data()?.photoURL,
               });
             },
             (error) => {
@@ -102,6 +93,7 @@ const Profile: React.FC = () => {
         phoneNumber: updatePhone
       })
       .then(() => {
+        toast("Profile Successfully Edited!");
         console.log('Profile Successfully Edited!');
       }).catch((error) => {
         console.log('Error updating the document:', error);

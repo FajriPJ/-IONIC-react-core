@@ -2,12 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Redirect, Route, useHistory } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
   IonSpinner
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -38,7 +33,7 @@ import './theme/variables.css';
 
 import { getCurrentUser } from './firebaseConfig'
 
-const RouteGuard: React.FC = () => {
+const RouteGuard: React.FC = () =>   {
   return (
     <IonReactRouter>
       <IonRouterOutlet>
@@ -52,7 +47,6 @@ const RouteGuard: React.FC = () => {
 
 const App: React.FC = () => {
 
-  const history = useHistory()
   const [busy, setBusy] = useState(true)
 
   useEffect(() => {
@@ -81,22 +75,6 @@ const App: React.FC = () => {
         : 
         <RouteGuard/>}
     </IonApp>
-    // <IonReactRouter>
-    //   <IonRouterOutlet>
-    //     <Route 
-    //       path="/" 
-    //       render={() => isLogin ? <Profile/> : <Login/>}
-    //       exact/>
-    //     <Route 
-    //       path="/login" 
-    //       render={() => isLogin ? <Profile/>: <Register/>}
-    //       exact/>
-    //     <Route 
-    //       path="/register" 
-    //       render={() => isLogin ? <Profile/>: <Register/>}
-    //       exact/>
-    //   </IonRouterOutlet>
-    // </IonReactRouter>
   )
 }
 

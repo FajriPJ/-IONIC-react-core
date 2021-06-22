@@ -15,7 +15,7 @@ import { key, mail } from "ionicons/icons";
 import { Link, useHistory } from "react-router-dom";
 import "./Login.css";
 import { loginUser } from "../firebaseConfig";
-import { toast } from "../toast";
+import { toast } from "../components/toast";
 
 const Login: React.FC = () => {
   const history = useHistory();

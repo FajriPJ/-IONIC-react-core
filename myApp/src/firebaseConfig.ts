@@ -1,5 +1,5 @@
 
-import { toast } from "./toast";
+import { toast } from "./components/toast";
 
 import firebase from 'firebase'
 require('firebase/auth')
@@ -20,17 +20,6 @@ var firebaseConfig = {
 export const auth = firebase.auth()
 export const database = firebase.firestore()
  
-// export async function registerUser(email: string, password: string) {
-//   try {
-//     const res = await auth.createUserWithEmailAndPassword(email, password)
-//     console.log(res)
-//     return true
-//   } catch (error) {
-//     console.log(error)
-//     toast(error.message, 4000)
-//   }
-// }
-
 export async function loginUser(email: string, password: string) {
   try {
     const res = await auth.signInWithEmailAndPassword(email, password)
@@ -43,22 +32,10 @@ export async function loginUser(email: string, password: string) {
   }
 }
 
-export const guides = (data:any) => {
-  data.map((doc:any) => {
-    const guide = doc.data()
-    // console.log(guide, '///////////')
-    return true
-  })
-}
-
 export function getCurrentUser() {
   return new Promise ((resolve, reject) => {
     const unsubscribe = auth.onAuthStateChanged(function(user) {
       if (user) {
-        // firebase.firestore().collection('users').onSnapshot(snapshot => {
-        //   guides(snapshot.docs)
-        //   console.log(guides(snapshot.docs), '[][][]')
-        // })
         console.log(user, '++++')
         resolve(user)
       } else {
