@@ -1,0 +1,6 @@
+{
+	"appId": "com.profile.app",
+	"appName": "Profile App",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
