@@ -2,11 +2,11 @@ import { Dispatch } from "redux";
 import {  auth, database } from "../../firebaseConfig";
 import {RootStore} from "../"
 import { ThunkAction } from "redux-thunk"
-import {AuthDispatchTypes, User, SigninData, SET_USER, SIGN_OUT, SET_SUCCESS, signUpData} from "../actions/authType"
+import {AuthDispatchTypes, User, SigninData, SET_USER, SIGN_OUT, signUpData} from "../actions/authType"
 import { toast } from "../../components/toast";
 
 
-export const signUp = (data: any): ThunkAction<void, RootStore, null, AuthDispatchTypes> => {
+export const signUp = (data: signUpData): ThunkAction<void, RootStore, null, AuthDispatchTypes> => {
   return async dispatch => {
     try {
       const res = await auth.createUserWithEmailAndPassword(data.email, data.password);

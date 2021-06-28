@@ -5,7 +5,7 @@ const initialState: AuthState = {
   user: null
 }
 
-const newsReducer = (state = initialState, action: AuthDispatchTypes) => {
+const authReducer = (state = initialState, action: AuthDispatchTypes) => {
   switch (action.type) {
     case SET_USER:
       return {
@@ -27,4 +27,4 @@ const newsReducer = (state = initialState, action: AuthDispatchTypes) => {
   }
 } 
 
-export default newsReducer
+export default authReducer

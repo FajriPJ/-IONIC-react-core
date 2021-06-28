@@ -1,8 +1,8 @@
 import {combineReducers} from "redux";
-import ProfileReducer from './profileReducer'
+import AuthReducer from './authReducer'
 
 const reducer = combineReducers({
-  ProfileReducer
+  AuthReducer
 })
 
 export default reducer

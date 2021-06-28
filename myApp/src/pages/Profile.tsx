@@ -200,11 +200,10 @@ const Profile: React.FC = () => {
                     />
                   </IonItem>
                   <IonGrid>
-                    <IonRow>
-                      <IonCol size-sm="6" size="6" class="ion-text-center">
+                    <IonRow >
+                      <IonCol size-sm="6" size="6" class="ion-text-center" style={{padding: "5px"}}>
                         <IonButton
-                          expand="full"
-                          class="ion-text-wrap min-max-width"
+                        expand= "block"
                           onClick={handleUpdate}
                           shape="round"
                         >
@@ -212,12 +211,11 @@ const Profile: React.FC = () => {
                         </IonButton>
                       </IonCol>
 
-                      <IonCol size-sm="6" size="6" class="ion-text-center">
+                      <IonCol size-sm="6" size="6" class="ion-text-center" style={{padding: "5px"}}>
                         <IonButton
-                          expand="full"
+                        expand= "block"
                           color="danger"
                           shape="round"
-                          class="ion-text-wrap min-max-width"
                           onClick={() => setShowModal(false)}
                         >
                           cancel
