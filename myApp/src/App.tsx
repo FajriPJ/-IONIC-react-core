@@ -11,7 +11,9 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import './App.css';
-
+import { getUserById } from './store/actions/authAction';
+import { useDispatch } from 'react-redux';
+import { auth } from './firebaseConfig';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -31,8 +33,6 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-import { getCurrentUser } from './firebaseConfig'
-
 const RouteGuard: React.FC = () =>   {
   return (
     <IonReactRouter>
@@ -47,22 +47,24 @@ const RouteGuard: React.FC = () =>   {
 
 const App: React.FC = () => {
 
+  const dispatch = useDispatch()
   const [busy, setBusy] = useState(true)
 
   useEffect(() => {
-    getCurrentUser()
-      .then(user => {
-        if (user) {
-          window.history.replaceState({}, '', '/' )
-        } else {
-          window.history.replaceState({}, '', '/login')
-        }
-        setBusy(false)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if(user) {
+        console.log(user, '[][][')
+        await dispatch(getUserById(user.uid));
+        window.history.replaceState({}, '', '/' )
+      } else {
+        window.history.replaceState({}, '', '/register')
+      }
+      setBusy(false)
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
 
 
   return (

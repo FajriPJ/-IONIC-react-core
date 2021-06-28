@@ -1,10 +1,8 @@
-
 import { toast } from "./components/toast";
-
 import firebase from 'firebase'
 require('firebase/auth')
 
-var firebaseConfig = {
+export let firebaseConfig:any = {
   apiKey: "AIzaSyDmMWV0ZMwGqthdt2Er7xHU88jCsXT_yMs",
   authDomain: "ionic-project-7548a.firebaseapp.com",
   databaseURL: "https://ionic-project-7548a-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -19,33 +17,3 @@ var firebaseConfig = {
 
 export const auth = firebase.auth()
 export const database = firebase.firestore()
- 
-export async function loginUser(email: string, password: string) {
-  try {
-    const res = await auth.signInWithEmailAndPassword(email, password)
-    console.log(res, 'ini dari login user')
-    return true
-  } catch (error) {
-    console.log(error)
-    toast(error.message, 4000)
-    return false
-  }
-}
-
-export function getCurrentUser() {
-  return new Promise ((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(function(user) {
-      if (user) {
-        console.log(user, '++++')
-        resolve(user)
-      } else {
-        resolve(null)
-      }
-      unsubscribe()
-    }) 
-  })
-}
-
-export function logOutUser() {
-  return firebase.auth().signOut()
-}

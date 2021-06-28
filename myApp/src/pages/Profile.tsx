@@ -23,26 +23,28 @@ import {
   IonModal,
   IonInput,
   IonList,
-  
+  IonGrid,
 } from "@ionic/react";
 import { calendarNumber, mailOpen, person, call } from "ionicons/icons";
-import { logOutUser } from "../firebaseConfig";
 import { useHistory, Link } from "react-router-dom";
 import { auth, database } from "../firebaseConfig";
 import { toast } from "../components/toast";
-
+import { useSelector, useDispatch } from "react-redux";
+import { signOut } from "../store/actions/authAction";
+import { RootStore } from "../store";
 import firebase from "firebase";
 require("firebase/auth");
 
-
 const Profile: React.FC = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const [usersData, setUsersData] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
- 
-  const [updateName, setUpdateName] = useState("")
-  const [updateBirthdate, setUpdateBirthdate] = useState("")
-  const [updatePhone, setUpdatePhone] = useState("")
+
+  const [updateName, setUpdateName] = useState("");
+  const [updateBirthdate, setUpdateBirthdate] = useState("");
+  const [updatePhone, setUpdatePhone] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -74,121 +76,159 @@ const Profile: React.FC = () => {
 
   function handleLogout(e: any) {
     e.preventDefault();
-    logOutUser();
-    history.push("./login");
+    dispatch(signOut());
+    history.push("./register");
   }
 
   function handleUpdate(e: any) {
-    console.log('asfasdfasd')
+    console.log("asfasdfasd");
     const user = firebase.auth().currentUser;
     let uid;
     if (user != null) {
       uid = user.uid;
-      const db = firebase.firestore();
-      const docRef = db.collection('users')
-      .doc(uid)
-      .update({
-        name: updateName,
-        birthdate: updateBirthdate,
-        phoneNumber: updatePhone
-      })
-      .then(() => {
-        toast("Profile Successfully Edited!");
-        console.log('Profile Successfully Edited!');
-      }).catch((error) => {
-        console.log('Error updating the document:', error);
-      })
+      database
+        .collection("users")
+        .doc(uid)
+        .update({
+          name: updateName,
+          birthdate: updateBirthdate,
+          phoneNumber: updatePhone,
+        })
+        .then(() => {
+          toast("Profile Successfully Edited!");
+          console.log("Profile Successfully Edited!");
+        })
+        .catch((error) => {
+          console.log("Error updating the document:", error);
+        });
     }
-    setShowModal(false); 
+    setShowModal(false);
   }
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="primary">
-            <IonButton onClick={(e) => handleLogout(e)} color="danger">
+      <IonContent className="ion-padding ion-text-center vertical-center">
+        <div className="header">
+          <div className="space-between">
+            <h4>Profile</h4>
+            <IonButtons slot="primary">
+            <IonButton
+              type="submit"
+              onClick={(e) => handleLogout(e)}
+              color="danger"
+            >
               Sign Out
             </IonButton>
           </IonButtons>
-          <IonTitle>Profile</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding ion-text-center vertical-center">
-        <IonAvatar ion-padding className="avatar item-avatar">
-          <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-        </IonAvatar>
-        <IonCard ion-margin>
-          <IonItem href="#" className="ion-activated">
-            <IonIcon icon={mailOpen} slot="start" />
-            <IonLabel>
-              {usersData.email}</IonLabel>
-          </IonItem>
+          </div>
+        </div>
 
-          <IonItem className="ion-activated">
-            <IonIcon icon={person} slot="start" />
-            {
-              usersData.name ? (
-                <IonLabel>{usersData.name}</IonLabel>) : (<IonLabel>Your name</IonLabel>
-              )
-            }
-          </IonItem>
+        <div className="avatar">
+          <IonAvatar ion-padding className="item-avatar">
+            <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+          </IonAvatar>
+        </div>
+        <IonItem className="ion-activated">
+          <IonIcon icon={mailOpen} slot="start" />
+          <IonLabel>{usersData.email}</IonLabel>
+        </IonItem>
 
-          <IonItem href="#">
-            <IonIcon icon={calendarNumber} slot="start"></IonIcon>
-              {
-                usersData.birthdate ? (
-                  <IonLabel>{usersData.birthdate}</IonLabel>) : (<IonLabel>Your birthdate</IonLabel>
-                )
-              }
-          </IonItem>
+        <IonItem className="ion-activated">
+          <IonIcon icon={person} slot="start" />
+          {usersData.name ? (
+            <IonLabel>{usersData.name}</IonLabel>
+          ) : (
+            <IonLabel>Your name</IonLabel>
+          )}
+        </IonItem>
 
-          <IonItem href="#">
-            <IonIcon icon={call} slot="start"></IonIcon>
-              {
-                usersData.phoneNumber ? (
-                  <IonLabel>{usersData.phoneNumber}</IonLabel>) : (<IonLabel>Your phone number</IonLabel>
-                )
-              }
-          </IonItem>
+        <IonItem className="ion-activated">
+          <IonIcon icon={calendarNumber} slot="start"></IonIcon>
+          {usersData.birthdate ? (
+            <IonLabel>{usersData.birthdate}</IonLabel>
+          ) : (
+            <IonLabel>Your birthdate</IonLabel>
+          )}
+        </IonItem>
 
-        </IonCard>
+        <IonItem className="ion-activated">
+          <IonIcon icon={call} slot="start"></IonIcon>
+          {usersData.phoneNumber ? (
+            <IonLabel>{usersData.phoneNumber}</IonLabel>
+          ) : (
+            <IonLabel>Your phone number</IonLabel>
+          )}
+        </IonItem>
         <IonButton
           className="edit-button"
-          ion-padding
+          expand= "block"
+          style={{marginTop: "20px"}}
           shape="round"
           onClick={() => setShowModal(true)}
-          // onClick={handleUpdate}
         >
           Update Profile
         </IonButton>
 
-        <IonModal isOpen={showModal} cssClass="my-custom-class ">
-          <IonList className="ion-padding">
-            <div className="title">
-              <h2>Update Your Profile</h2>
-            </div>
-            <IonItem>
-              <IonLabel position="floating">your name</IonLabel>
-              <IonInput 
-                onIonChange={(e: any) => setUpdateName(e.target.value)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating">your Phone Number</IonLabel>
-              <IonInput 
-                onIonChange={(e: any) => setUpdatePhone(e.target.value)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel></IonLabel>
-              <IonInput 
-                type="date" 
-                onIonChange={(e: any) => setUpdateBirthdate(e.target.value)}
-                />
-            </IonItem>
-            <IonButton ion-padding onClick={handleUpdate}>Update Profile</IonButton>
-          </IonList>
+        <IonModal isOpen={showModal}>
+          <IonContent>
+            <IonGrid>
+              <IonRow>
+                <form id="form">
+                  <h2>Update your profile</h2>
+                  <IonItem ion-padding>
+                    <IonLabel position="floating">your name</IonLabel>
+                    <IonInput
+                      ion-padding
+                      onIonChange={(e: any) => setUpdateName(e.target.value)}
+                    />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="floating">your Phone Number</IonLabel>
+                    <IonInput
+                      onIonChange={(e: any) => setUpdatePhone(e.target.value)}
+                    />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel></IonLabel>
+                    <IonInput
+                      type="date"
+                      onIonChange={(e: any) =>
+                        setUpdateBirthdate(e.target.value)
+                      }
+                    />
+                  </IonItem>
+                  <IonGrid>
+                    <IonRow>
+                      <IonCol size-sm="6" size="6" class="ion-text-center">
+                        <IonButton
+                          expand="full"
+                          class="ion-text-wrap min-max-width"
+                          onClick={handleUpdate}
+                          shape="round"
+                        >
+                          Update
+                        </IonButton>
+                      </IonCol>
+
+                      <IonCol size-sm="6" size="6" class="ion-text-center">
+                        <IonButton
+                          expand="full"
+                          color="danger"
+                          shape="round"
+                          class="ion-text-wrap min-max-width"
+                          onClick={() => setShowModal(false)}
+                        >
+                          cancel
+                        </IonButton>
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </form>
+              </IonRow>
+            </IonGrid>
+          </IonContent>
         </IonModal>
       </IonContent>
     </IonPage>

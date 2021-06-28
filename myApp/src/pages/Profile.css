@@ -1,24 +1,48 @@
-
-.vertical-center {
-  position:absolute;
-  top:10%;
+* {
+  padding: 0%;
 }
 
-.avatar{
+.header {
+  height: 180px;
+  padding-top: -20px;
+}
+
+.header h2 {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px 0px 10px;
+  align-items: center;
+}
+
+.avatar {
+  display: flex;
+  justify-content: center;   
+  margin-top: -79px;
+  margin-bottom: 30px;
+}
+
+.item-avatar  {  
   margin: auto;
-}
-
-.item-avatar  {     
   width:100% !important;  
   height : 100% !important;  
   max-width: 100px !important;  
   max-height: 100px !important; 
 }
 
-.edit-button {
-  width: 95%;
-  border-radius: 50%;
-  vertical-align: middle;
-  padding-start: 10px;
-  padding-end: 10px;
+ion-item {
+  margin-bottom: 5px;
+}
+
+ion-content ion-item ion-label {
+  margin-left: 10px;
+}
+
+h2 {
+  text-align: center;
 }
